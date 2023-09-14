@@ -1,0 +1,172 @@
+<html lang="en">
+
+<head>
+    <title>Typing App</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600;700;800&display=swap"
+          rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600;700;800&family=Roboto&display=swap"
+          rel="stylesheet">
+</head>
+
+<style>
+    * {
+        padding: 0;
+        margin: 0;
+    }
+
+    .main {
+        width: 100%;
+        height: 100%;
+        background-color: #3C1742;
+        color: #F3FFB9;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .nav-bar-container {
+        border-bottom: 1px solid #F3FFB940;
+        font-weight: lighter;
+        font-size: 2rem;
+        font-family: Poppins, sans-serif;
+        height: fit-content;
+    }
+
+    .nav-bar {
+        padding: 0.6em;
+    }
+
+    .container {
+        padding: 5em;
+        font-size: 1.5rem;
+        font-family: "Roboto Mono", sans-serif;
+        line-height: 1.8;
+    }
+
+    #input {
+        width: 100%;
+        height: 7em;
+        background: transparent;
+        border: 0;
+        outline: none;
+        font-size: 1.5rem;
+        font-family: "Roboto Mono", sans-serif;
+        line-height: 1.8;
+        color: #F3FFB9;
+        resize: none;
+    }
+
+    .input-label {
+        font-family: "Poppins Light", sans-serif;
+        color: #F3FFB960;
+    }
+
+    .input-label-active {
+        color: #F3FFB9f0;
+    }
+
+    #input::-webkit-scrollbar {
+        display: none;
+    }
+
+    #input:active {
+        border: 0;
+    }
+
+    .input-div {
+        border: 2px #F3FFB960 solid;
+        padding: 0.5em;
+    }
+
+    .input-div-active {
+        border: 2px #F3FFB9f0 solid;
+    }
+
+    .typed-text {
+        color: #F3FFB920;
+    }
+
+    .current-text {
+        background-color: #F3FFB930;
+    }
+    .typed-error {
+        color: #C42021f0;
+    }
+    .current-error {
+        background-color: #C420210f;
+    }
+</style>
+
+<body>
+<div class="main">
+    <!-- NavBar -->
+    <div class="nav-bar-container">
+        <div class="nav-bar">
+        <span>
+            Typing App
+        </span>
+        </div>
+    </div>
+
+
+    <!-- Main -->
+    <div class="container">
+        <div>
+            <span id="typed-text" class="typed-text"></span>
+            <span id="current-text" class="current-text"></span>
+            <span id="untyped-text" class="untyped-text"></span>
+        </div>
+        <br>
+        <label class="input-label" id="input-label" for="input">Type to start the test</label>
+        <div class="input-div" id="input-div">
+            <textarea id="input" oninput="changeHandler()"></textarea>
+        </div>
+    </div>
+</div>
+
+<script>
+    const text = "Historically, the fundamental role of pharmacists as a healthcare practitioner was to check and distribute drugs to doctors for medication that had been prescribed to patients."
+    const typedTextElement = document.getElementById("typed-text")
+    const currentTextElement = document.getElementById("current-text")
+    const untypedTextElement = document.getElementById("untyped-text")
+    const input = document.getElementById("input")
+
+    untypedTextElement.innerText = text
+    input.addEventListener("focus", () => {
+        document.getElementById("input-div").classList.add("input-div-active")
+        document.getElementById("input-label").classList.add("input-label-active")
+    })
+    input.addEventListener("focusout", () => {
+        document.getElementById("input-div").classList.remove("input-div-active")
+        document.getElementById("input-label").classList.remove("input-label-active")
+    })
+
+    function changeHandler() {
+        const inputLength = input.value.split(" ").length
+        const textList = text.split(" ")
+        if (inputLength > textList.length) {
+            location.href = "/result"
+        }
+        currentTextElement.classList.remove("current-error")
+        const typedList = textList.map((item, i) => {
+            if (i >= inputLength) {
+                return item
+            }
+            if (item !== input.value.split(" ")[i]) {
+                return `<span class='typed-error'>${item}</span>`
+            }
+            return item
+        })
+        typedTextElement.innerHTML = typedList.slice(0, inputLength - 1).join(" ")
+        currentTextElement.innerText = textList[inputLength - 1]
+        untypedTextElement.innerText = textList.slice(inputLength, textList.length).join(" ")
+    }
+
+</script>
+
+</body>
+
+</html>
