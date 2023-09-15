@@ -26,9 +26,9 @@
         --highlight: #FFFFFF30;
         --highlight-alt: #FFFFFF10;
         --red: #D1495B;
-        --red-alt: #D1495B80;
+        --red-alt: #FF495F80;
         --fg: #FFFFF2;
-        --fg-alt: #FFFFF2c0;
+        --fg-alt: #FFFFF280;
     }
     * {
         padding: 0;
@@ -93,7 +93,8 @@
         line-height: 1.8;
         color: var(--fg);
         resize: none;
-        caret: #FFFFF2 block;
+        caret: #FFFFF2;
+        caret-shape: block;
     }
 
     .input-label {
@@ -125,6 +126,9 @@
     .input-div-active {
         border: 2px var(--fg) solid;
     }
+    .text-container {
+        padding: 10px;
+    }
     .untyped-text {
     }
 
@@ -148,6 +152,32 @@
         padding: 5px 10px;
         border-radius: 5px;
     }
+    #keyboard {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        padding: 20px;
+    }
+    .keyboard-row {
+        display: flex;
+        flex-direction: row;
+        justify-items: center;
+        justify-content: center;
+        gap: 5px;
+    }
+    .key {
+        padding: 10px 20px;
+        color: var(--fg-alt);
+        border: 1px var(--fg-alt) solid;
+        border-radius: 5px;
+    }
+    .key-active {
+        background-color: var(--fg-alt);
+        color: var(--bg)
+    }
+    .key-error {
+        background-color: var(--red-alt);
+    }
 </style>
 
 <body>
@@ -165,7 +195,6 @@
         </div>
     </div>
 
-
     <!-- Main -->
     <div class="container">
         <div class="text-container">
@@ -176,7 +205,12 @@
         <br>
         <label class="input-label" id="input-label" for="input">Type to start the test</label>
         <div class="input-div" id="input-div">
-            <textarea id="input" oninput="changeHandler()"></textarea>
+            <textarea id="input" spellcheck="false" oninput="changeHandler()"></textarea>
+        </div>
+        <div id="keyboard">
+            <div id="first-row" class="keyboard-row"></div>
+            <div id="second-row" class="keyboard-row"></div>
+            <div id="third-row" class="keyboard-row"></div>
         </div>
     </div>
 </div>
@@ -187,7 +221,61 @@
     const currentTextElement = document.getElementById("current-text")
     const untypedTextElement = document.getElementById("untyped-text")
     const input = document.getElementById("input")
+    const keyboard = document.getElementById("keyboard")
     let previousChar = ""
+    function createKeyboard() {
+        const keys = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        const firstRow = "qwertyuiop[]"
+        const secondRow = "asdfghjkl;'"
+        const thirdRow = "zxcvbnm,./"
+        const firstRowElement = document.getElementById("first-row")
+        const secondRowElement = document.getElementById("second-row")
+        const thirdRowElement = document.getElementById("third-row")
+        // Add the keys to the keyboard
+        for (let i = 0; i < firstRow.length; i++) {
+            let key = document.createElement("div")
+            key.classList.add("key");
+            key.id = firstRow[i]
+            key.textContent = firstRow[i]
+            firstRowElement.appendChild(key)
+        }
+        for (let i = 0; i < secondRow.length; i++) {
+            let key = document.createElement("div")
+            key.classList.add("key");
+            key.id = secondRow[i]
+            key.textContent = secondRow[i]
+            secondRowElement.appendChild(key)
+        }
+        for (let i = 0; i < thirdRow.length; i++) {
+            let key = document.createElement("div")
+            key.classList.add("key");
+            key.id = thirdRow[i]
+            key.textContent = thirdRow[i]
+            thirdRowElement.appendChild(key)
+        }
+        // Listen for keydown events
+        window.addEventListener('keydown', function(event) {
+            const letter = event.key
+            const keyElement = document.getElementById(letter)
+            if (keyElement) {
+                if (text[input.value.length] === letter)
+                    keyElement.classList.add('key-active');
+                else
+                    keyElement.classList.add("key-error")
+            }
+        });
+
+        // Listen for keyup events
+        window.addEventListener('keyup', function(event) {
+            const letter = event.key
+            const keyElement = document.getElementById(letter)
+            if (keyElement) {
+                keyElement.classList.remove('key-active');
+                keyElement.classList.remove('key-error');
+            }
+        });
+    }
+    createKeyboard();
     input.classList.add("hidden")
     fetch("/api/randomSentence").then(
         response => {
@@ -219,14 +307,19 @@
         }
         previousChar = e.key
     } )
+    input.addEventListener("paste", (e) => {
+        e.preventDefault()
+    })
+
+
     function changeHandler() {
-        const inputLength = input.value.split(" ").length
         const textList = text.split(" ")
+        const inputList = input.value.split(" ")
+        const inputLength = inputList.length
         if (inputLength > textList.length) {
             location.href = "/result"
             return
         }
-        currentTextElement.classList.remove("current-error")
         const typedList = textList.map((item, i) => {
             if (i >= inputLength) {
                 return item
@@ -236,10 +329,20 @@
             }
             return item
         })
+        const currentWord = inputList[inputLength - 1]
+        currentTextElement.classList.remove("current-error")
+        for (let i = 0; i < currentWord.length; i++ ){
+            if (currentWord[i] !== textList[inputLength - 1][i]) {
+                currentTextElement.classList.add("current-error")
+                break;
+            }
+        }
+
         typedTextElement.innerHTML = typedList.slice(0, inputLength - 1).join(" ")
         currentTextElement.innerText = textList[inputLength - 1]
         untypedTextElement.innerText = textList.slice(inputLength, textList.length).join(" ")
     }
+
 </script>
 
 </body>
