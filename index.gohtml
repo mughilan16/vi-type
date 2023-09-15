@@ -10,11 +10,26 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600;700;800&family=Roboto&display=swap"
           rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cedarville+Cursive&family=Poppins:wght@300;500;600;700;800&family=Roboto&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Victor+Mono:ital,wght@1,300;1,400&display=swap" rel="stylesheet">
 </head>
-<!-- https://coolors.co/edae49-d1495b-00798c-30638e-003d5b -->
 
 <style>
+    :root {
+        --bg: #003D5B;
+        --bg-alt: #003D5Bf0;
+        --highlight: #FFFFFF30;
+        --highlight-alt: #FFFFFF10;
+        --red: #D1495B;
+        --red-alt: #D1495B80;
+        --fg: #FFFFF2;
+        --fg-alt: #FFFFF2c0;
+    }
     * {
         padding: 0;
         margin: 0;
@@ -23,14 +38,14 @@
     .main {
         width: 100%;
         height: 100%;
-        background-color: #3C1742;
-        color: #F3FFB9;
+        background-color: var(--bg);
+        color: var(--fg);
         display: flex;
         flex-direction: column;
     }
 
     .nav-bar-container {
-        border-bottom: 1px solid #F3FFB940;
+        border-bottom: 1px solid var(--fg-alt);
         font-weight: lighter;
         font-size: 2rem;
         font-family: "Poppins ExtraBold", sans-serif;
@@ -44,14 +59,20 @@
     }
 
     .title-main {
-        background-color: #F3FFB9;
-        color: #3C1742;
+        background: linear-gradient(45deg, var(--fg), var(--bg-alt));
+        color: var(--bg);
         padding: 5px 10px;
         border-radius: 5px;
     }
 
     .title-sub {
-        color: #F3FFB9;
+        color: var(--fg);
+        font-family: "Victor Mono", monospace;
+        font-style: italic;
+        text-transform: lowercase;
+        background: linear-gradient(-135deg, var(--fg), var(--fg-alt));
+        -webkit-text-fill-color: transparent;
+        -webkit-background-clip: text;
     }
 
     .container {
@@ -70,17 +91,18 @@
         font-size: 1.5rem;
         font-family: "Roboto Mono", sans-serif;
         line-height: 1.8;
-        color: #F3FFB9;
+        color: var(--fg);
         resize: none;
+        caret: #FFFFF2 block;
     }
 
     .input-label {
         font-family: "Roboto", sans-serif;
-        color: #F3FFB980;
+        color: var(--fg-alt);
     }
 
     .input-label-active {
-        color: #F3FFB9f0;
+        color: var(--fg);
     }
     .hidden {
         display: none;
@@ -95,31 +117,34 @@
     }
 
     .input-div {
-        border: 2px #F3FFB980 solid;
+        border: 2px var(--fg-alt) solid;
         border-radius: 5px;
         padding: 0.5em;
     }
 
     .input-div-active {
-        border: 2px #F3FFB9f0 solid;
+        border: 2px var(--fg) solid;
+    }
+    .untyped-text {
     }
 
     .typed-text {
-        color: #F3FFB920;
+        color: var(--fg);
     }
 
     .current-text {
-        background-color: #F3FFB930;
+        background: linear-gradient(45deg, var(--highlight), var(--highlight-alt));
     }
     .typed-error {
-        color: #C42021f0;
+        padding: 1px;
+        color: var(--red);
     }
     .current-error {
-        background-color: #C420210f;
+        background-color: var(--red-alt);
     }
     .user-div {
-        background-color: #F3FFB9;
-        color: #3C1742;
+        background-color: var(--fg-alt);
+        color: var(--bg);
         padding: 5px 10px;
         border-radius: 5px;
     }
@@ -143,7 +168,7 @@
 
     <!-- Main -->
     <div class="container">
-        <div>
+        <div class="text-container">
             <span id="typed-text" class="typed-text"></span>
             <span id="current-text" class="current-text"></span>
             <span id="untyped-text" class="untyped-text"></span>
@@ -162,6 +187,7 @@
     const currentTextElement = document.getElementById("current-text")
     const untypedTextElement = document.getElementById("untyped-text")
     const input = document.getElementById("input")
+    let previousChar = ""
     input.classList.add("hidden")
     fetch("/api/randomSentence").then(
         response => {
@@ -186,12 +212,19 @@
         document.getElementById("input-div").classList.remove("input-div-active")
         document.getElementById("input-label").classList.remove("input-label-active")
     })
-
+    input.addEventListener("keydown", (e) => {
+        if (previousChar === " " && e.key === " ") {
+            e.preventDefault()
+            return
+        }
+        previousChar = e.key
+    } )
     function changeHandler() {
         const inputLength = input.value.split(" ").length
         const textList = text.split(" ")
         if (inputLength > textList.length) {
             location.href = "/result"
+            return
         }
         currentTextElement.classList.remove("current-error")
         const typedList = textList.map((item, i) => {
