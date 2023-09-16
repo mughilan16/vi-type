@@ -1,7 +1,8 @@
 <html lang="en">
 
 <head>
-    <title>VI type</title>
+    <title>Vi Type</title>
+    <link rel="icon" type="image/png" href="/logo">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600;700;800&display=swap"
@@ -36,8 +37,8 @@
     }
 
     .main {
-        width: 100%;
-        height: 100%;
+        width: 100vw;
+        height: 100vh;
         background-color: var(--bg);
         color: var(--fg);
         display: flex;
@@ -76,7 +77,7 @@
     }
 
     .container {
-        padding: 5em;
+        padding: 3em 5em 5em;
         font-size: 1.5rem;
         font-family: "Roboto Mono", sans-serif;
         line-height: 1.8;
@@ -127,6 +128,9 @@
 
     .input-div-active {
         border: 2px var(--fg) solid;
+    }
+    #info {
+        padding: 10px;
     }
     .text-container {
         padding: 10px;
@@ -222,6 +226,10 @@
 
     <!-- Main -->
     <div class="container" id="container">
+        <div id="info">
+            <span id="info-completed">0/0</span>
+            <span id="info-speed">0</span>
+        </div>
         <div class="text-container">
             <span id="typed-text" class="typed-text"></span>
             <span id="current-text" class="current-text"></span>
@@ -253,8 +261,13 @@
     const container = document.getElementById("container")
     const loadingScreen = document.getElementById("loading-screen")
     let previousChar = ""
+
+    const infoCompleted = document.getElementById("info-completed")
+    const infoSpeed = document.getElementById("info-speed")
+
+
+    let isStarted = false;
     function createKeyboard() {
-        const keys = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         const firstRow = "qwertyuiop[]"
         const secondRow = "asdfghjkl;'"
         const thirdRow = "zxcvbnm,./"
@@ -322,6 +335,7 @@
         container.classList.remove("hidden")
         loadingScreen.classList.remove("loading-screen")
         loadingScreen.classList.add("hidden")
+        infoCompleted.innerText = `0/${text.split(" ").length}`
         input.focus()
     }).catch(error => {
         console.log("Fetch error", error)
@@ -345,12 +359,20 @@
         e.preventDefault()
     })
 
+    function Timer() {
+    }
 
     function changeHandler() {
+        if (!isStarted) {
+            setInterval(Timer, 100)
+            isStarted = true
+        }
         const textList = text.split(" ")
         const inputList = input.value.split(" ")
+        infoCompleted.innerText = `${inputList.length-1}/${textList.length}`
         const inputLength = inputList.length
         if (inputLength > textList.length) {
+            input.value = ""
             location.href = "/result"
             return
         }
