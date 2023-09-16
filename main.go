@@ -21,6 +21,8 @@ func main() {
 	mux.HandleFunc("/logo", logoHandler)
 	// APIs
 	mux.HandleFunc("/api/randomSentence", randomSentence)
+	fmt.Printf("Starting server at port %d\n", port)
+	fmt.Printf("http://locahost%s", addr)
 	err := http.ListenAndServe(addr, mux)
 	if err != nil {
 		log.Fatalln(err)
