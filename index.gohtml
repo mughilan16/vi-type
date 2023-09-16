@@ -27,7 +27,7 @@
         --highlight-alt: #FFFFFF10;
         --red: #D1495B;
         --red-alt: #FF495F80;
-        --fg: #FFFFF2;
+        --fg: #FFFFF2C0;
         --fg-alt: #FFFFF280;
     }
     * {
@@ -100,6 +100,8 @@
     .input-label {
         font-family: "Roboto", sans-serif;
         color: var(--fg-alt);
+        width: 100%;
+        text-align: center;
     }
 
     .input-label-active {
@@ -178,6 +180,29 @@
     .key-error {
         background-color: var(--red-alt);
     }
+    .container-hide {
+        display: none;
+    }
+
+    .loading-screen {
+        width: 100%;
+        height: 100%;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+    }
+    .loader {
+        border: 4px solid var(--fg);
+        border-top: 4px solid var(--bg-alt);
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        animation: spin 2s linear infinite;
+    }
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% {transform: rotate(360deg); }
+    }
 </style>
 
 <body>
@@ -196,7 +221,7 @@
     </div>
 
     <!-- Main -->
-    <div class="container">
+    <div class="container" id="container">
         <div class="text-container">
             <span id="typed-text" class="typed-text"></span>
             <span id="current-text" class="current-text"></span>
@@ -213,6 +238,9 @@
             <div id="third-row" class="keyboard-row"></div>
         </div>
     </div>
+    <div class="loading-screen" id="loading-screen">
+        <div class="loader"></div>
+    </div>
 </div>
 
 <script>
@@ -222,6 +250,8 @@
     const untypedTextElement = document.getElementById("untyped-text")
     const input = document.getElementById("input")
     const keyboard = document.getElementById("keyboard")
+    const container = document.getElementById("container")
+    const loadingScreen = document.getElementById("loading-screen")
     let previousChar = ""
     function createKeyboard() {
         const keys = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -276,7 +306,9 @@
         });
     }
     createKeyboard();
-    input.classList.add("hidden")
+    container.classList.add("hidden")
+    loadingScreen.classList.remove("hidden")
+
     fetch("/api/randomSentence").then(
         response => {
             if (!response.ok) {
@@ -287,7 +319,9 @@
     ).then(data => {
         text = data.text;
         untypedTextElement.innerText = text
-        input.classList.remove("hidden")
+        container.classList.remove("hidden")
+        loadingScreen.classList.remove("loading-screen")
+        loadingScreen.classList.add("hidden")
         input.focus()
     }).catch(error => {
         console.log("Fetch error", error)
