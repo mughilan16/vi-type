@@ -3,410 +3,74 @@
 
 <head>
     <title>Vi Type</title>
-    <link rel="icon" type="image/png" href="/logo">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="/static/img/logo.png">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600;700;800&display=swap"
-          rel="stylesheet">
+        rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600;700;800&family=Roboto&display=swap"
-          rel="stylesheet">
+        rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cedarville+Cursive&family=Poppins:wght@300;500;600;700;800&family=Roboto&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cedarville+Cursive&family=Poppins:wght@300;500;600;700;800&family=Roboto&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Victor+Mono:ital,wght@1,300;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Victor+Mono:ital,wght@1,300;1,400&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="/static/css/home.css">
 </head>
 
-<style>
-    :root {
-        --bg: #003D5B;
-        --bg-alt: #003D5Bf0;
-        --highlight: #FFFFFF30;
-        --highlight-alt: #FFFFFF10;
-        --red: #D1495B;
-        --red-alt: #FF495F80;
-        --fg: #FFFFF2C0;
-        --fg-alt: #FFFFF280;
-    }
-    * {
-        padding: 0;
-        margin: 0;
-    }
-
-    .main {
-        width: 100vw;
-        height: 100vh;
-        background-color: var(--bg);
-        color: var(--fg);
-        display: flex;
-        flex-direction: column;
-    }
-
-    .nav-bar-container {
-        border-bottom: 1px solid var(--fg-alt);
-        font-weight: lighter;
-        font-size: 1.5rem;
-        font-family: "Poppins ExtraBold", sans-serif;
-        height: fit-content;
-    }
-
-    .nav-bar {
-        padding: 0.6em 0.3em 0.3em;
-        display: flex;
-        justify-content: space-between;
-    }
-
-    .title-main {
-        background: linear-gradient(45deg, var(--fg), var(--bg-alt));
-        color: var(--bg);
-        padding: 5px 10px;
-        border-radius: 5px;
-    }
-
-    .title-sub {
-        color: var(--fg);
-        font-family: "Victor Mono", monospace;
-        font-style: italic;
-        text-transform: lowercase;
-        background: linear-gradient(-135deg, var(--fg), var(--fg-alt));
-        -webkit-text-fill-color: transparent;
-        -webkit-background-clip: text;
-    }
-
-    .container {
-        padding: 3em 5em 5em;
-        font-size: 1.1rem;
-        font-family: "Roboto Mono", sans-serif;
-        line-height: 1.8;
-        max-width: 800px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    #input {
-        width: 100%;
-        height: 7rem;
-        background: transparent;
-        border: 0;
-        outline: none;
-        font-size: 1.1rem;
-        font-family: "Roboto Mono", sans-serif;
-        line-height: 1.8;
-        color: var(--fg);
-        resize: none;
-        caret: #FFFFF2;
-        caret-shape: block;
-    }
-
-    .input-label {
-        font-family: "Roboto", sans-serif;
-        color: var(--fg-alt);
-        width: 100%;
-        text-align: center;
-    }
-
-    .input-label-active {
-        color: var(--fg);
-    }
-    .hidden {
-        display: none;
-    }
-
-    #input::-webkit-scrollbar {
-        display: none;
-    }
-
-    #input:active {
-        border: 0;
-    }
-
-    .input-div {
-        border: 2px var(--fg-alt) solid;
-        border-radius: 5px;
-        padding: 0.5em;
-    }
-
-    .input-div-active {
-        border: 2px var(--fg) solid;
-    }
-    #info {
-        padding: 10px;
-    }
-    .text-container {
-        padding: 10px;
-    }
-    .untyped-text {
-    }
-
-    .typed-text {
-        color: var(--fg);
-    }
-
-    .current-text {
-        background: linear-gradient(45deg, var(--highlight), var(--highlight-alt));
-    }
-    .typed-error {
-        padding: 1px;
-        color: var(--red);
-    }
-    .current-error {
-        background-color: var(--red-alt);
-    }
-    .user-div {
-        background-color: var(--fg-alt);
-        color: var(--bg);
-        padding: 1px 13px 5px;
-        border-radius: 5px;
-    }
-    #keyboard {
-        display: flex;
-        flex-direction: column;
-        gap: 5px;
-        padding: 20px;
-        font-size: 1.2rem;
-    }
-    .keyboard-row {
-        display: flex;
-        flex-direction: row;
-        justify-items: center;
-        justify-content: center;
-        gap: 5px;
-    }
-    .key {
-        padding: 5px 15px;
-        color: var(--fg-alt);
-        font-family: "Roboto Mono", sans-serif;
-        border: 1px var(--fg-alt) solid;
-        border-radius: 5px;
-    }
-    .key-active {
-        background-color: var(--fg-alt);
-        color: var(--bg)
-    }
-    .key-error {
-        background-color: var(--red-alt);
-    }
-    .container-hide {
-        display: none;
-    }
-
-    .loading-screen {
-        width: 100vw;
-        height: 100vh;
-        justify-content: center;
-        align-items: center;
-        display: flex;
-    }
-    .loader {
-        border: 4px solid var(--fg);
-        border-top: 4px solid var(--bg-alt);
-        border-radius: 50%;
-        width: 60px;
-        height: 60px;
-        animation: spin 2s linear infinite;
-    }
-    @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% {transform: rotate(360deg); }
-    }
-</style>
-
 <body>
-<div class="main">
-    <!-- NavBar -->
-    <div class="nav-bar-container">
-        <div class="nav-bar">
-            <div>
-                <span class="title-main">VI</span>
-                <span class="title-sub">TYPE</span>
+    <div class="main">
+        <!-- NavBar -->
+        <div class="nav-bar-container">
+            <div class="nav-bar">
+                <div>
+                    <span class="title-main">VI</span>
+                    <span class="title-sub">TYPE</span>
+                </div>
+                <div class="user-div">
+                    <div class="fa fa-user user"></div>
+                </div>
             </div>
-            <div class="user-div">
-                <div class="fa fa-user user"></div>
+        </div>
+
+        <!-- Main -->
+        <div class="container" id="container">
+            <div id="info">
+                <span id="info-completed">0/0</span>
+                <span id="info-speed">0</span>
+            </div>
+            <div class="text-container">
+                <span id="typed-text" class="typed-text"></span>
+                <span id="current-text" class="current-text"></span>
+                <span id="untyped-text" class="untyped-text"></span>
+            </div>
+            <br>
+            <label class="input-label" id="input-label" for="input">Type to start the test</label>
+            <div class="input-div" id="input-div">
+                <textarea id="input" spellcheck="false" oninput="changeHandler()"></textarea>
+            </div>
+            <div id="keyboard">
+                <div id="first-row" class="keyboard-row"></div>
+                <div id="second-row" class="keyboard-row"></div>
+                <div id="third-row" class="keyboard-row"></div>
             </div>
         </div>
-    </div>
-
-    <!-- Main -->
-    <div class="container" id="container">
-        <div id="info">
-            <span id="info-completed">0/0</span>
-            <span id="info-speed">0</span>
-        </div>
-        <div class="text-container">
-            <span id="typed-text" class="typed-text"></span>
-            <span id="current-text" class="current-text"></span>
-            <span id="untyped-text" class="untyped-text"></span>
-        </div>
-        <br>
-        <label class="input-label" id="input-label" for="input">Type to start the test</label>
-        <div class="input-div" id="input-div">
-            <textarea id="input" spellcheck="false" oninput="changeHandler()"></textarea>
-        </div>
-        <div id="keyboard">
-            <div id="first-row" class="keyboard-row"></div>
-            <div id="second-row" class="keyboard-row"></div>
-            <div id="third-row" class="keyboard-row"></div>
+        <div class="loading-screen" id="loading-screen">
+            <div class="loader"></div>
         </div>
     </div>
-    <div class="loading-screen" id="loading-screen">
-        <div class="loader"></div>
-    </div>
-</div>
 
-<script>
-    let text = "Historically, the fundamental role of pharmacists as a healthcare practitioner was to check and distribute drugs to doctors for medication that had been prescribed to patients."
-    const typedTextElement = document.getElementById("typed-text")
-    const currentTextElement = document.getElementById("current-text")
-    const untypedTextElement = document.getElementById("untyped-text")
-    const input = document.getElementById("input")
-    const keyboard = document.getElementById("keyboard")
-    const container = document.getElementById("container")
-    const loadingScreen = document.getElementById("loading-screen")
-    let previousChar = ""
-
-    const infoCompleted = document.getElementById("info-completed")
-    const infoSpeed = document.getElementById("info-speed")
-
-
-    let isStarted = false;
-    function createKeyboard() {
-        const firstRow = "qwertyuiop[]"
-        const secondRow = "asdfghjkl;'"
-        const thirdRow = "zxcvbnm,./"
-        const firstRowElement = document.getElementById("first-row")
-        const secondRowElement = document.getElementById("second-row")
-        const thirdRowElement = document.getElementById("third-row")
-        // Add the keys to the keyboard
-        for (let i = 0; i < firstRow.length; i++) {
-            let key = document.createElement("div")
-            key.classList.add("key");
-            key.id = firstRow[i]
-            key.textContent = firstRow[i]
-            firstRowElement.appendChild(key)
-        }
-        for (let i = 0; i < secondRow.length; i++) {
-            let key = document.createElement("div")
-            key.classList.add("key");
-            key.id = secondRow[i]
-            key.textContent = secondRow[i]
-            secondRowElement.appendChild(key)
-        }
-        for (let i = 0; i < thirdRow.length; i++) {
-            let key = document.createElement("div")
-            key.classList.add("key");
-            key.id = thirdRow[i]
-            key.textContent = thirdRow[i]
-            thirdRowElement.appendChild(key)
-        }
-        // Listen for keydown events
-        window.addEventListener('keydown', function(event) {
-            const letter = event.key
-            const keyElement = document.getElementById(letter)
-            if (keyElement) {
-                if (text[input.value.length] === letter)
-                    keyElement.classList.add('key-active');
-                else
-                    keyElement.classList.add("key-error")
-            }
-        });
-
-        // Listen for keyup events
-        window.addEventListener('keyup', function(event) {
-            const letter = event.key
-            const keyElement = document.getElementById(letter)
-            if (keyElement) {
-                keyElement.classList.remove('key-active');
-                keyElement.classList.remove('key-error');
-            }
-        });
-    }
-    createKeyboard();
-    container.classList.add("hidden")
-    loadingScreen.classList.remove("hidden")
-
-    fetch("/api/randomSentence").then(
-        response => {
-            if (!response.ok) {
-                throw new Error("Network Response Error")
-            }
-            return response.json()
-        }
-    ).then(data => {
-        text = data.text;
-        untypedTextElement.innerText = text
-        container.classList.remove("hidden")
-        loadingScreen.classList.remove("loading-screen")
-        loadingScreen.classList.add("hidden")
-        infoCompleted.innerText = `0/${text.split(" ").length}`
-        input.focus()
-    }).catch(error => {
-        console.log("Fetch error", error)
-    })
-    input.addEventListener("focus", () => {
-        document.getElementById("input-div").classList.add("input-div-active")
-        document.getElementById("input-label").classList.add("input-label-active")
-    })
-    input.addEventListener("focusout", () => {
-        document.getElementById("input-div").classList.remove("input-div-active")
-        document.getElementById("input-label").classList.remove("input-label-active")
-    })
-    input.addEventListener("keydown", (e) => {
-        if (previousChar === " " && e.key === " ") {
-            e.preventDefault()
-            return
-        }
-        previousChar = e.key
-    } )
-    input.addEventListener("paste", (e) => {
-        e.preventDefault()
-    })
-
-    function Timer() {
-    }
-
-    function changeHandler() {
-        if (!isStarted) {
-            setInterval(Timer, 100)
-            isStarted = true
-        }
-        const textList = text.split(" ")
-        const inputList = input.value.split(" ")
-        infoCompleted.innerText = `${inputList.length-1}/${textList.length}`
-        const inputLength = inputList.length
-        if (inputLength > textList.length) {
-            input.value = ""
-            location.href = "/result"
-            return
-        }
-        const typedList = textList.map((item, i) => {
-            if (i >= inputLength) {
-                return item
-            }
-            if (item !== input.value.split(" ")[i]) {
-                return `<span class='typed-error'>${item}</span>`
-            }
-            return item
-        })
-        const currentWord = inputList[inputLength - 1]
-        currentTextElement.classList.remove("current-error")
-        for (let i = 0; i < currentWord.length; i++ ){
-            if (currentWord[i] !== textList[inputLength - 1][i]) {
-                currentTextElement.classList.add("current-error")
-                break;
-            }
-        }
-
-        typedTextElement.innerHTML = typedList.slice(0, inputLength - 1).join(" ")
-        currentTextElement.innerText = textList[inputLength - 1]
-        untypedTextElement.innerText = textList.slice(inputLength, textList.length).join(" ")
-    }
-
-</script>
-
+    <script src="/static/js/home.js"> </script>
 </body>
 
 </html>

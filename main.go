@@ -19,6 +19,9 @@ func main() {
 	mux.HandleFunc("/", homeHandler)
 	mux.HandleFunc("/result", resultHandler)
 	mux.HandleFunc("/logo", logoHandler)
+
+	fileServer := http.FileServer(http.Dir("./static/"))
+	mux.Handle("/static/", http.StripPrefix("/static", fileServer))
 	// APIs
 	mux.HandleFunc("/api/randomSentence", randomSentence)
 	fmt.Printf("Starting server at port %d\n", port)
