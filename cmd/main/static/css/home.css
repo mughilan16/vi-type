@@ -112,19 +112,17 @@
   border: 2px var(--fg) solid;
 }
 
-#info {
+.info {
   padding: 10px;
+  padding-bottom: 0;
 }
 
 .text-container {
   padding: 10px;
+  padding-top: 3px;
 }
 
-.untyped-text {
-}
-
-.typed-text {
-  color: var(--fg);
+.typed-text { color: var(--fg);
 }
 
 .current-text {
@@ -178,6 +176,18 @@
 
 .key-error {
   background-color: var(--red-alt);
+}
+
+.seperator {
+    padding: 5px 15px;
+}
+
+#space-key {
+    padding: 5px 70px;
+    color: var(--fg-alt);
+    border: 1px var(--fg-alt) solid;
+    border-radius: 5px;
+    font-size: 1.1rem;
 }
 
 .container-hide {

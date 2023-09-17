@@ -4,7 +4,6 @@
 <head>
     <title>Vi Type</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="/static/img/logo.png">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -26,6 +25,8 @@
         rel="stylesheet">
 
     <link rel="stylesheet" href="/static/css/home.css">
+    <link rel="icon" type="image/png" href="/static/img/logo.png">
+    <link rel="shortcut icon" type="image/png" href="/static/img/logo.png">
 </head>
 
 <body>
@@ -44,8 +45,8 @@
         </div>
 
         <!-- Main -->
-        <div class="container" id="container">
-            <div id="info">
+        <div class="container hidden" id="container">
+            <div id="info" class="info">
                 <span id="info-completed">0/0</span>
                 <span id="info-speed">0</span>
             </div>
@@ -63,6 +64,9 @@
                 <div id="first-row" class="keyboard-row"></div>
                 <div id="second-row" class="keyboard-row"></div>
                 <div id="third-row" class="keyboard-row"></div>
+                <div id="fourth-row" class="keyboard-row">
+                    <div id="space-key">space</div>
+                </div>
             </div>
         </div>
         <div class="loading-screen" id="loading-screen">

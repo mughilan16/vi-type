@@ -14,9 +14,9 @@ const infoSpeed = document.getElementById("info-speed");
 
 let time = false;
 function createKeyboard() {
-    const firstRow = "qwertyuiop[]";
-    const secondRow = "asdfghjkl;'";
-    const thirdRow = "zxcvbnm,./";
+    const firstRow = "qwert yuiop[]";
+    const secondRow = "asdfg hjkl;'";
+    const thirdRow = "zxcvb nm,./";
     const firstRowElement = document.getElementById("first-row");
     const secondRowElement = document.getElementById("second-row");
     const thirdRowElement = document.getElementById("third-row");
@@ -24,12 +24,26 @@ function createKeyboard() {
     // Add the keys to the keyboard
     for (let i = 0; i < firstRow.length; i++) {
         let key = document.createElement("div");
+        if (firstRow[i] == " ") {
+            let seperator = document.createElement("div");
+            seperator.classList.add("seperator");
+            seperator.textContent = " "
+            firstRowElement.appendChild(seperator)
+            continue
+        }
         key.classList.add("key");
         key.id = firstRow[i];
         key.textContent = firstRow[i];
         firstRowElement.appendChild(key);
     }
     for (let i = 0; i < secondRow.length; i++) {
+        if (secondRow[i] == " ") {
+            let seperator = document.createElement("div");
+            seperator.classList.add("seperator");
+            seperator.textContent = " "
+            secondRowElement.appendChild(seperator)
+            continue
+        }
         let key = document.createElement("div");
         key.classList.add("key");
         key.id = secondRow[i];
@@ -37,6 +51,13 @@ function createKeyboard() {
         secondRowElement.appendChild(key);
     }
     for (let i = 0; i < thirdRow.length; i++) {
+        if (thirdRow[i] == " ") {
+            let seperator = document.createElement("div");
+            seperator.classList.add("seperator");
+            seperator.textContent = " "
+            thirdRowElement.appendChild(seperator)
+            continue
+        }
         let key = document.createElement("div");
         key.classList.add("key");
         key.id = thirdRow[i];
@@ -46,7 +67,10 @@ function createKeyboard() {
     // Listen for keydown events
     window.addEventListener("keydown", function(event) {
         const letter = event.key;
-        const keyElement = document.getElementById(letter);
+        let keyElement = document.getElementById(letter);
+        if (event.key === " ") {
+            keyElement = document.getElementById("space-key")
+        }
         if (keyElement) {
             if (text[input.value.length] === letter)
                 keyElement.classList.add("key-active");
@@ -57,7 +81,10 @@ function createKeyboard() {
     // Listen for keyup events
     window.addEventListener("keyup", function(event) {
         const letter = event.key;
-        const keyElement = document.getElementById(letter);
+        let keyElement = document.getElementById(letter);
+        if (event.key === " ") {
+            keyElement = document.getElementById("space-key")
+        }
         if (keyElement) {
             keyElement.classList.remove("key-active");
             keyElement.classList.remove("key-error");
@@ -65,9 +92,6 @@ function createKeyboard() {
     });
 }
 createKeyboard();
-container.classList.add("hidden");
-loadingScreen.classList.remove("hidden");
-
 fetch("/api/randomSentence")
     .then((response) => {
         if (!response.ok) {
@@ -128,6 +152,9 @@ function changeHandler() {
     const inputLength = inputList.length;
     if (inputLength > textList.length) {
         input.value = "";
+        container.classList.add("hidden");
+        loadingScreen.classList.remove("hidden");
+        loadingScreen.classList.add("loading-screen");
         location.href = "/result";
         return;
     }
