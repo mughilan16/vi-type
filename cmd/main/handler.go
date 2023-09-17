@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"math/rand"
@@ -18,7 +17,7 @@ type randomSentenceResponse struct {
 type resultRequest struct {
 	SpeedList  []int `json:"speedList"`
 	ErrorCount int   `json:"errorCount"`
-	TimeTaken  int   `json:"timeTakenInSecondsi`
+	TimeTaken  int   `json:"timeTakenInSeconds"`
 }
 
 func (app *application) randomSentence(w http.ResponseWriter, r *http.Request) {
@@ -42,7 +41,7 @@ func (app *application) randomSentence(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) homeHandler(w http.ResponseWriter, r *http.Request) {
-	app.renderTemplate(w, r, "index")
+	app.renderTemplate(w, nil, "index")
 }
 
 func (app *application) resultHandler(w http.ResponseWriter, r *http.Request) {
@@ -58,6 +57,5 @@ func (app *application) resultHandler(w http.ResponseWriter, r *http.Request) {
 		log.Fatalln(err)
 		return
 	}
-	fmt.Println(data)
-	app.renderTemplate(w, r, "result")
+	app.renderTemplate(w, data, "result")
 }

@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 )
 
-func (app *application) renderTemplate(w http.ResponseWriter, r *http.Request, page string) {
+func (app *application) renderTemplate(w http.ResponseWriter, data interface{}, page string) {
 	filename := fmt.Sprintf("%s.gohtml", page)
 	cwd, err := os.Getwd()
 	if err != nil {
@@ -23,7 +23,7 @@ func (app *application) renderTemplate(w http.ResponseWriter, r *http.Request, p
 		log.Fatalln(err)
 	}
 	w.Header().Set("Content-Type", "text/html")
-	err = tmpl.Execute(w, nil)
+	err = tmpl.Execute(w, data)
 	if err != nil {
 		app.errorLog.Println(err)
 		log.Fatalln(err)
