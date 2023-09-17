@@ -2,7 +2,7 @@
 
 To run the server 
 ```bash
-go run main.go
+go run ./cmd/main/
 ```
 
-Add go to http://localhost:3000/
+Add go to http://localhost:4000/
