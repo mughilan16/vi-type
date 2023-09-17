@@ -22,6 +22,7 @@ func (app *application) renderTemplate(w http.ResponseWriter, r *http.Request, p
 		app.errorLog.Println(err)
 		log.Fatalln(err)
 	}
+	w.Header().Set("Content-Type", "text/html")
 	err = tmpl.Execute(w, nil)
 	if err != nil {
 		app.errorLog.Println(err)

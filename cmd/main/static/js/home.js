@@ -12,6 +12,11 @@ let previousChar = "";
 const infoCompleted = document.getElementById("info-completed");
 const infoSpeed = document.getElementById("info-speed");
 
+const speedList = []
+let errorCount = 0
+
+let timerInterval;
+
 let time = false;
 function createKeyboard() {
     const firstRow = "qwert yuiop[]";
@@ -20,16 +25,15 @@ function createKeyboard() {
     const firstRowElement = document.getElementById("first-row");
     const secondRowElement = document.getElementById("second-row");
     const thirdRowElement = document.getElementById("third-row");
-    let timerInterval;
     // Add the keys to the keyboard
     for (let i = 0; i < firstRow.length; i++) {
         let key = document.createElement("div");
         if (firstRow[i] == " ") {
             let seperator = document.createElement("div");
             seperator.classList.add("seperator");
-            seperator.textContent = " "
-            firstRowElement.appendChild(seperator)
-            continue
+            seperator.textContent = " ";
+            firstRowElement.appendChild(seperator);
+            continue;
         }
         key.classList.add("key");
         key.id = firstRow[i];
@@ -40,9 +44,9 @@ function createKeyboard() {
         if (secondRow[i] == " ") {
             let seperator = document.createElement("div");
             seperator.classList.add("seperator");
-            seperator.textContent = " "
-            secondRowElement.appendChild(seperator)
-            continue
+            seperator.textContent = " ";
+            secondRowElement.appendChild(seperator);
+            continue;
         }
         let key = document.createElement("div");
         key.classList.add("key");
@@ -54,9 +58,9 @@ function createKeyboard() {
         if (thirdRow[i] == " ") {
             let seperator = document.createElement("div");
             seperator.classList.add("seperator");
-            seperator.textContent = " "
-            thirdRowElement.appendChild(seperator)
-            continue
+            seperator.textContent = " ";
+            thirdRowElement.appendChild(seperator);
+            continue;
         }
         let key = document.createElement("div");
         key.classList.add("key");
@@ -69,7 +73,7 @@ function createKeyboard() {
         const letter = event.key;
         let keyElement = document.getElementById(letter);
         if (event.key === " ") {
-            keyElement = document.getElementById("space-key")
+            keyElement = document.getElementById("space-key");
         }
         if (keyElement) {
             if (text[input.value.length] === letter)
@@ -83,7 +87,7 @@ function createKeyboard() {
         const letter = event.key;
         let keyElement = document.getElementById(letter);
         if (event.key === " ") {
-            keyElement = document.getElementById("space-key")
+            keyElement = document.getElementById("space-key");
         }
         if (keyElement) {
             keyElement.classList.remove("key-active");
@@ -136,15 +140,24 @@ input.addEventListener("paste", (e) => {
 
 function timer() {
     let min = (new Date().getTime() - time) / 60_000;
-    let speed = input.value.split(" ").length / min;
-    console.log(speed);
+    const inputList = input.value.split(" ");
+    const textList = text.split(" ");
+    let correctWords = [];
+    for (let i = 0; i < inputList.length; i++) {
+        if (inputList[i] === textList[i]) {
+            correctWords.push(inputList[i]);
+        }
+    }
+    length = correctWords.join(" ").length / 5;
+    let speed = length / min
+    speedList.push(parseInt(speed))
     infoSpeed.innerText = `${parseInt(speed)}`;
 }
 
 function changeHandler() {
     if (!time) {
         time = new Date().getTime();
-        timerInterval = setInterval(timer, 200);
+        timerInterval = setInterval(timer, 400);
     }
     const textList = text.split(" ");
     const inputList = input.value.split(" ");
@@ -152,10 +165,35 @@ function changeHandler() {
     const inputLength = inputList.length;
     if (inputLength > textList.length) {
         input.value = "";
+        clearInterval(timerInterval)
         container.classList.add("hidden");
         loadingScreen.classList.remove("hidden");
         loadingScreen.classList.add("loading-screen");
-        location.href = "/result";
+        const data = {
+            "speedList": speedList,
+            "errorCount" : errorCount,
+            "timeTakenInSeconds" : parseInt((time - new Date().getDate() )/1000)
+        }
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        }
+        fetch('/result', requestOptions)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok")
+                }
+                return response.text()
+            }).then(data => {
+                container.classList.remove("hidden")
+                loadingScreen.classList.add("hidden")
+                loadingScreen.classList.remove("loading-screen")
+                console.log(data)
+                container.innerHTML = data
+            })
         return;
     }
     const typedList = textList.map((item, i) => {
@@ -172,6 +210,7 @@ function changeHandler() {
     for (let i = 0; i < currentWord.length; i++) {
         if (currentWord[i] !== textList[inputLength - 1][i]) {
             currentTextElement.classList.add("current-error");
+            errorCount++;
             break;
         }
     }
@@ -182,3 +221,4 @@ function changeHandler() {
         .slice(inputLength, textList.length)
         .join(" ");
 }
+

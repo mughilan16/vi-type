@@ -2,11 +2,24 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
+	"io/ioutil"
 	"log"
 	"math/rand"
 	"net/http"
 	"time"
 )
+
+type randomSentenceResponse struct {
+	ID   int    `json:"id"`
+	Text string `json:"text"`
+}
+
+type resultRequest struct {
+	SpeedList  []int `json:"speedList"`
+	ErrorCount int   `json:"errorCount"`
+	TimeTaken  int   `json:"timeTakenInSecondsi`
+}
 
 func (app *application) randomSentence(w http.ResponseWriter, r *http.Request) {
 	source := rand.NewSource(time.Now().UnixNano())
@@ -33,5 +46,18 @@ func (app *application) homeHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) resultHandler(w http.ResponseWriter, r *http.Request) {
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		app.errorLog.Println(err)
+		log.Fatalln(err)
+		return
+	}
+	var data resultRequest
+	if err := json.Unmarshal(body, &data); err != nil {
+		app.errorLog.Println(err)
+		log.Fatalln(err)
+		return
+	}
+	fmt.Println(data)
 	app.renderTemplate(w, r, "result")
 }
