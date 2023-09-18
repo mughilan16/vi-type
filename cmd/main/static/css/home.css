@@ -72,7 +72,7 @@
   border: 0;
   outline: none;
   font-size: 1.1rem;
-  font-family: "Roboto Mono", sans-serif;
+  font-family: "Roboto Mono", sans-serif,Arial;
   line-height: 1.8;
   color: var(--fg);
   resize: none;
@@ -81,7 +81,7 @@
 }
 
 .input-label {
-  font-family: "Roboto", sans-serif;
+  font-family: "Roboto", sans-serif,Arial;
   color: var(--fg-alt);
   width: 100%;
   text-align: center;
