@@ -8,6 +8,8 @@ import (
 	"net/http"
 	"os"
 	"time"
+
+	"github.com/joho/godotenv"
 )
 
 type config struct {
@@ -15,6 +17,10 @@ type config struct {
 	env  string
 	db   struct {
 		dsn string
+	}
+	auth struct {
+		key    string
+		secret string
 	}
 }
 
@@ -38,7 +44,7 @@ func (app *application) serve() error {
 	return srv.ListenAndServe()
 }
 
-func main() {
+func createApp() (*application, error) {
 	var cfg config
 	flag.IntVar(&cfg.port, "port", 4000, "Server to listen on")
 	flag.StringVar(&cfg.env, "env", "development", "app env {production||development}")
@@ -47,15 +53,31 @@ func main() {
 	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
 	errorLog := log.New(os.Stdout, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
 
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal(err)
+		errorLog.Fatal(err)
+		return nil, err
+	}
 	tc := make(map[string]*template.Template)
+	cfg.auth.key = os.Getenv("GOOGLE_CLIENT_KEY")
+	cfg.auth.secret = os.Getenv("GOOGLE_CLIENT_SECRET")
 
-	app := application{
+	return &application{
 		config:        cfg,
 		infoLog:       infoLog,
 		errorLog:      errorLog,
 		templateCache: tc,
+	}, nil
+}
+
+func main() {
+	app, err := createApp()
+	if err != nil {
+		return
 	}
-	err := app.serve()
+	app.connectDB()
+	err = app.serve()
 	if err != nil {
 		app.errorLog.Println(err)
 		log.Fatalln(err)
