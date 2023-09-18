@@ -6,6 +6,8 @@ const untypedTextElement = document.getElementById("untyped-text");
 const resultContainer = document.getElementById("result");
 const chartElement = document.getElementById("result-chart");
 
+
+
 const input = document.getElementById("input");
 const keyboard = document.getElementById("keyboard");
 const container = document.getElementById("container");
