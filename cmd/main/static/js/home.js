@@ -3,6 +3,9 @@ let text =
 const typedTextElement = document.getElementById("typed-text");
 const currentTextElement = document.getElementById("current-text");
 const untypedTextElement = document.getElementById("untyped-text");
+const resultContainer = document.getElementById("result");
+const chartElement = document.getElementById("result-chart");
+
 const input = document.getElementById("input");
 const keyboard = document.getElementById("keyboard");
 const container = document.getElementById("container");
@@ -12,8 +15,16 @@ let previousChar = "";
 const infoCompleted = document.getElementById("info-completed");
 const infoSpeed = document.getElementById("info-speed");
 
-const speedList = []
-let errorCount = 0
+const speedList = [];
+const rawSpeedList = [];
+const timeList = [];
+let errorCount = 0;
+
+container.addEventListener("keydown", (e) => {
+    if (e.which == 9) {
+        location.reload();
+    }
+});
 
 let timerInterval;
 
@@ -149,8 +160,12 @@ function timer() {
         }
     }
     length = correctWords.join(" ").length / 5;
-    let speed = length / min
-    speedList.push(parseInt(speed))
+    let rawLength = input.length / 5;
+    let speed = length / min;
+    let rawSpeed = rawLength / min;
+    timeList.push(min);
+    speedList.push(parseInt(speed));
+    rawSpeedList.push(rawSpeed);
     infoSpeed.innerText = `${parseInt(speed)}`;
 }
 
@@ -165,35 +180,35 @@ function changeHandler() {
     const inputLength = inputList.length;
     if (inputLength > textList.length) {
         input.value = "";
-        clearInterval(timerInterval)
+        clearInterval(timerInterval);
         container.classList.add("hidden");
         loadingScreen.classList.remove("hidden");
         loadingScreen.classList.add("loading-screen");
         const data = {
-            "speedList": speedList,
-            "errorCount" : errorCount,
-            "timeTakenInSeconds" : parseInt((time - new Date().getDate() )/1000)
-        }
+            speedList: speedList,
+            errorCount: errorCount,
+            timeTakenInSeconds: parseInt((time - new Date().getDate()) / 1000),
+        };
         const requestOptions = {
-            method: 'POST',
+            method: "POST",
             headers: {
-                'Content-Type': 'application/json'
+                "Content-Type": "application/json",
             },
-            body: JSON.stringify(data)
-        }
-        fetch('/result', requestOptions)
-            .then(response => {
+            body: JSON.stringify(data),
+        };
+        fetch("/result", requestOptions)
+            .then((response) => {
                 if (!response.ok) {
-                    throw new Error("Network response was not ok")
+                    throw new Error("Network response was not ok");
                 }
-                return response.text()
-            }).then(data => {
-                container.classList.remove("hidden")
-                loadingScreen.classList.add("hidden")
-                loadingScreen.classList.remove("loading-screen")
-                console.log(data)
-                container.innerHTML = data
+                return null;
             })
+            .then((_) => {
+                loadingScreen.classList.add("hidden");
+                loadingScreen.classList.remove("loading-screen");
+                resultContainer.classList.remove("hidden");
+                displayResult();
+            });
         return;
     }
     const typedList = textList.map((item, i) => {
@@ -222,3 +237,37 @@ function changeHandler() {
         .join(" ");
 }
 
+function displayResult() {
+    const chart = new Chart(chartElement, {
+        type: "line",
+        data: {
+            labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+            datasets: [
+                {
+                    label: "wpm",
+                    data: speedList,
+                },
+                {
+                    label: "raw",
+                    data: rawSpeedList,
+                }
+            ],
+        },
+        options: {
+            plugins: {
+                legend: {
+                    display: false,
+                },
+            },
+            scales: {
+                x: {
+                    name: "",
+                },
+                y: {
+                    beginAtZero: true,
+                },
+            },
+        },
+    });
+    console.log(chart);
+}

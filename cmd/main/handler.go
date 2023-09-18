@@ -57,5 +57,6 @@ func (app *application) resultHandler(w http.ResponseWriter, r *http.Request) {
 		log.Fatalln(err)
 		return
 	}
-	app.renderTemplate(w, data, "result")
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("OK"))
 }
