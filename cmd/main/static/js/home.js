@@ -238,11 +238,13 @@ function changeHandler() {
 }
 
 function displayResult() {
-    const step = Math.floor(speedList.length/15)
-    const reducedSpeedList = [] 
-    for(let i = 0;i<speedList.length;i+=step){
-        const slice = speedList.slice(i,i+step);
-        const mean = Math.floor(slice.reduce((acc,val) => acc + val, 0) / slice.length);
+    const step = Math.floor(speedList.length - 4/ 15);
+    const reducedSpeedList = [];
+    for (let i = 4; i < speedList.length; i += step) {
+        const slice = speedList.slice(i, i + step);
+        const mean = Math.floor(
+            slice.reduce((acc, val) => acc + val, 0) / slice.length,
+        );
         reducedSpeedList.push(mean);
     }
     const chart = new Chart(chartElement, {
@@ -257,7 +259,7 @@ function displayResult() {
                 {
                     label: "raw",
                     data: rawSpeedList,
-                }
+                },
             ],
         },
         options: {
