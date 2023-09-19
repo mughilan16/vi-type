@@ -21,6 +21,7 @@
   color: var(--fg);
   display: flex;
   flex-direction: column;
+  justify-self: stretch;
 }
 
 .nav-bar-container {
@@ -55,7 +56,11 @@
 }
 
 .container {
+  display: flex;
+  flex-direction: column;
   padding: 2em;
+  justify-content: center;
+  height: 80vh;
   font-size: 1.1rem;
   font-family: "Roboto Mono", sans-serif;
   line-height: 1.8;
@@ -123,7 +128,8 @@
   padding-top: 3px;
 }
 
-.typed-text { color: var(--fg);
+.typed-text {
+  color: var(--fg);
 }
 
 .current-text {
@@ -180,15 +186,15 @@
 }
 
 .seperator {
-    padding: 5px 15px;
+  padding: 5px 15px;
 }
 
 #space-key {
-    padding: 5px 70px;
-    color: var(--fg-alt);
-    border: 1px var(--fg-alt) solid;
-    border-radius: 5px;
-    font-size: 1.1rem;
+  padding: 5px 70px;
+  color: var(--fg-alt);
+  border: 1px var(--fg-alt) solid;
+  border-radius: 5px;
+  font-size: 1.1rem;
 }
 
 .container-hide {

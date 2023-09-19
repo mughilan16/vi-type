@@ -38,7 +38,8 @@
                     <span class="title-sub">TYPE</span>
                 </div>
                 <div class="user-div">
-                    <a href='/auth/google/login'><div class="fa fa-user user"></div><a>
+                    <button class="fa fa-user user" onclick="function hanldeUser() {location.href = '/auth/google/login';console.log('clicked')}">
+                    </button>
                 </div>
             </div>
         </div>
@@ -55,10 +56,6 @@
                 <span id="untyped-text" class="untyped-text"></span>
             </div>
             <br>
-            <label class="input-label" id="input-label" for="input">Type to start the test. Press tab to restart</label>
-            <div class="input-div" id="input-div">
-                <textarea id="input" spellcheck="false" oninput="changeHandler()"></textarea>
-            </div>
             <div id="keyboard">
                 <div id="first-row" class="keyboard-row"></div>
                 <div id="second-row" class="keyboard-row"></div>
