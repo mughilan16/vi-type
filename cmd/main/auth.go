@@ -22,14 +22,14 @@ var (
 	oauthStateString = "randomstate"
 )
 
-func (app *application) handleGoogleLogin(w http.ResponseWriter, r *http.Request) {
+func (app *application) googleLogin(w http.ResponseWriter, r *http.Request) {
 	googleOAuthConfig.ClientID = app.config.auth.key
 	googleOAuthConfig.ClientSecret = app.config.auth.secret
 	url := googleOAuthConfig.AuthCodeURL(oauthStateString)
 	http.Redirect(w, r, url, http.StatusTemporaryRedirect)
 }
 
-func (app *application) hanldeGoogleCallback(w http.ResponseWriter, r *http.Request) {
+func (app *application) googleCallback(w http.ResponseWriter, r *http.Request) {
 	state := r.FormValue("state")
 	if state != oauthStateString {
 		app.errorLog.Println("Invalid Oauth state")

@@ -13,7 +13,7 @@ func (app *application) routes() *http.ServeMux {
 	mux.Handle("/static/", http.StripPrefix("/static", fileServer))
 	//AUTH
 	mux.HandleFunc("/auth/google/login", app.handleGoogleLogin)
-	mux.HandleFunc("/auth/google/callback", app.hanldeGoogleCallback)
+	mux.HandleFunc("/auth/google/callback", app.handleGoogleCallback)
 	// APIs
 	mux.HandleFunc("/api/randomSentence", app.randomSentence)
 	return mux

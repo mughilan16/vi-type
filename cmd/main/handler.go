@@ -60,3 +60,11 @@ func (app *application) resultHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte("OK"))
 }
+
+func (app *application) handleGoogleLogin(w http.ResponseWriter, r *http.Request) {
+	app.googleLogin(w, r)
+}
+
+func (app *application) handleGoogleCallback(w http.ResponseWriter, r *http.Request) {
+	app.googleCallback(w, r)
+}
