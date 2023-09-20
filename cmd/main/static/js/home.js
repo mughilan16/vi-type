@@ -20,6 +20,7 @@ class App {
     constructor() {
         this.timerInterval;
         this.time = false;
+        this.currentWord = "";
         this.input = [];
         this.text = "";
         this.textList = [];
@@ -33,23 +34,32 @@ class App {
     start() {
         this.fetchText();
         this.startInputListener();
+        this.createKeyboard();
     }
 
     startInputListener() {
         window.addEventListener("keydown", (e) => {
             const letter = e.key;
-            if (e.which == 9) {
+            if (e.key == "Tab") {
+                e.preventDefault();
                 location.reload();
-            }
-            else if (letter.length === 1 && letter !== " ") {
-                this.input.push(letter);
-            }
-            else if (letter === " ") {
-                this.input.push(" ");
+            } else if (letter.length === 1 && letter !== " ") {
+                this.currentWord += letter;
+            } else if (letter === " ") {
+                this.input.push(this.currentWord);
+                this.currentWord = "";
             }
 
-            if (letter === "Backspace") this.input.pop();
-            console.log(this.input.join(""));
+            if (letter === "Backspace") {
+                if (this.currentWord.length > 0) {
+                    this.currentWord = this.currentWord.slice(
+                        0,
+                        this.currentWord.length - 1,
+                    );
+                } else if (this.input.length > 0) this.currentWord = this.input.pop();
+            }
+            console.log(this.currentWord);
+            console.log(this.input.join(" "));
         });
     }
 
@@ -131,9 +141,10 @@ class App {
                 keyElement = document.getElementById("space-key");
             }
             if (keyElement) {
-                if (this.text[input.value.length] === letter)
+                //if (this.text[input.value.length] === letter)
                     keyElement.classList.add("key-active");
-                else keyElement.classList.add("key-error");
+                keyElement.style.animation = "key-active 0.3s linear"
+                //else keyElement.classList.add("key-error");
             }
         });
 
@@ -145,6 +156,7 @@ class App {
                 keyElement = document.getElementById("space-key");
             }
             if (keyElement) {
+                keyElement.style.animation = "key-inactive 0.3s linear"
                 keyElement.classList.remove("key-active");
                 keyElement.classList.remove("key-error");
             }
