@@ -16,13 +16,12 @@ const loadingScreen = document.getElementById("loading-screen");
 const infoCompleted = document.getElementById("info-completed");
 const infoSpeed = document.getElementById("info-speed");
 
-
 class App {
     constructor() {
         this.timerInterval;
         this.time = false;
-        this.input = ""
-        this.text = ""
+        this.input = [];
+        this.text = "";
         this.textList = [];
         this.previousChar = "";
         this.speedList = [];
@@ -32,16 +31,26 @@ class App {
     }
 
     start() {
-        this.fetchText()
-        this.startRestartHandler();
+        this.fetchText();
+        this.startInputListener();
     }
 
     startInputListener() {
         window.addEventListener("keydown", (e) => {
-            if (e.DOM_KEY_LOCATION_STANDARD) {
-                console.log(e.key)
+            const letter = e.key;
+            if (e.which == 9) {
+                location.reload();
             }
-        })
+            else if (letter.length === 1 && letter !== " ") {
+                this.input.push(letter);
+            }
+            else if (letter === " ") {
+                this.input.push(" ");
+            }
+
+            if (letter === "Backspace") this.input.pop();
+            console.log(this.input.join(""));
+        });
     }
 
     fetchText() {
@@ -54,8 +63,9 @@ class App {
             })
             .then((data) => {
                 this.text = data.text;
-                this.textList = this.text.split(" ")
+                this.textList = this.text.split(" ");
                 untypedTextElement.innerText = this.text;
+                console.log("Workign");
                 container.classList.remove("hidden");
                 loadingScreen.classList.remove("loading-screen");
                 loadingScreen.classList.add("hidden");
@@ -208,14 +218,6 @@ class App {
             .join(" ");
     }
 
-    startRestartHandler() {
-        container.addEventListener("keydown", (e) => {
-            if (e.which == 9) {
-                location.reload();
-            }
-        });
-    }
-
     timer() {
         let min = (new Date().getTime() - time) / 60_000;
         const inputList = this.input.split(" ");
@@ -283,3 +285,5 @@ class App {
     }
 }
 
+const app = new App();
+app.start();
